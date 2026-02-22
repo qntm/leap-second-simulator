@@ -1,0 +1,16 @@
+{
+  "type": "module",
+  "devDependencies": {
+    "esbuild": "^0.27.3",
+    "eslint": "^9.39.3",
+    "express": "^5.2.1",
+    "neostandard": "^0.12.2",
+    "prop-types": "^15.8.1",
+    "t-a-i": "^5.2.0"
+  },
+  "scripts": {
+    "build": "node scripts/build.js",
+    "start-dev": "node scripts/start-dev.js",
+    "start-built": "node scripts/start-built.js"
+  }
+}

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>qntm's leap second simulator @ Things Of Interest</title>
+    <link rel="icon" href="favicon.png" />
+    <script type="importmap">
+      {
+        "imports": {
+          "react": "https://esm.sh/react@19.2.0",
+          "react-dom/": "https://esm.sh/react-dom@19.2.0/"
+        }
+      }
+    </script>
+    <script defer type="module" src="main.js"></script>
+    <style type="text/css">
+      * {
+        box-sizing: border-box;
+      }
+
+      body, h1, h2, h3, h4, p, ul {
+        margin: 0;
+      }
+
+      td {
+        padding: 0;
+      }
+
+      /*
+        orange: 254, 119, 31
+        red: 249, 42, 9
+        black: 12, 12, 15
+        white: 255, 254, 238
+      */
+
+      body {
+        background-color: rgb(52, 115, 147);
+        color: rgb(255, 254, 238);
+        font-family: sans-serif;
+        font-size: 1rem;
+      }
+
+      a {
+        color: rgb(254, 119, 31);
+      }
+
+      .app {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        max-width: 32rem;
+        padding: .5rem;
+        margin: 0 auto;
+      }
+
+      .main {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      h4 {
+        font-weight: normal;
+        border-bottom: .0625rem solid rgb(254, 119, 31);
+        font-size: .875rem;
+      }
+
+      /* Some irritating engineering to get overflow to the left to work */
+      .data {
+        max-width: 100%;
+        text-align: right;
+        font-family: monospace;
+        white-space: nowrap;
+        overflow: hidden;
+        font-size: 1.125rem;
+      }
+
+      .data-inner {
+        float: right;
+      }
+
+      .footer {
+        text-align: center;
+      }
+
+      .controls {
+        display: flex;
+        flex-direction: column;
+        gap: .5rem;
+      }
+
+      .controls-row {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .buttons {
+        display: flex;
+        gap: .5rem;
+      }
+      
+      button {
+        background-color: rgb(254, 119, 31);
+        color: white;
+        border-radius: .25rem;
+        border: 0;
+        padding: .25rem .5rem;
+        line-height: 1rem;
+        font-size: .833333rem;
+      }
+
+      .secondary {
+        background-color: rgb(53, 84, 110);
+      }
+
+      button[disabled] {
+        background-color: gray;
+      }
+
+      .points-of-interest {
+        border-collapse: collapse;
+        font-size: 80%;
+      }
+
+      .points-of-interest > tr > td {
+        vertical-align: top;
+        padding-bottom: .5rem;
+        padding-right: .5rem;
+      }
+
+      .points-of-interest > tr:last-child > td {
+        padding-bottom: 0;
+      }
+
+      .points-of-interest > tr > td:last-child {
+        padding-right: 0;
+      }
+
+      @media (min-width: 480px) {
+        html {
+          font-size: 1.25em;
+        }
+        .main {
+          padding: 2rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="index__root"></div>
+    <script>
+      window.sc_project = 667681
+      window.sc_invisible = 1
+      window.sc_partition = 5
+      window.sc_security = 'f56850e2'
+      window.sc_remove_link = 1
+    </script>
+    <script src="https://statcounter.com/counter/counter_xhtml.js"></script>
+  </body>
+</html>
