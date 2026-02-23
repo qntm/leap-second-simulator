@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import React, { useCallback } from 'react'
-import { MODELS } from 't-a-i/nanos'
+import { MODELS, UNIX_END } from 't-a-i/nanos'
 
 import {
   MODEL_OPTIONS,
@@ -11,11 +11,24 @@ import {
   FPSES,
   INITIAL_FPS,
   FIRST_POINT,
-  LAST_POINT
+  CURRENT_POINT
 } from '../options.tsx'
 import { div, modulo, multiplyByScale } from '../utils.ts'
 
-const JAN = 0
+// TODO: add ATOMIC_END to `t-a-i`
+
+const UNIX_END_DATE = new Date(UNIX_END / 1_000_000)
+const UNIX_END_STR = [
+  String(UNIX_END_DATE.getUTCFullYear()).padStart(4, '0'),
+  '-',
+  String(UNIX_END_DATE.getUTCMonth() + 1).padStart(2, '0'),
+  '-',
+  String(UNIX_END_DATE.getUTCDate()).padStart(2, '0')
+].join('')
+
+const FUTURE_WARNING = `⚠ It is unknown how the relationship between TAI and Unix time will evolve after ${UNIX_END_STR}.`
+const TRUNCATE_WARNING_1 = '⚠️ Drift rate truncated. Increase precision to ns'
+const TRUNCATE_WARNING_2 = '⚠️ Drift rate truncated. Increase precision to µs or ns'
 
 const formatNanos = (nanos, { numDecimalDigits, symbol }) => {
   // Happens during a break
@@ -147,7 +160,7 @@ export const Main = ({
 
   // This loses a few milliseconds of accuracy I guess
   const handleClickNow = useCallback(() => {
-    handleClickPoint(LAST_POINT)
+    handleClickPoint(CURRENT_POINT)
   }, [goToUnix])
 
   const setScale = useCallback(nextScale => {
@@ -241,6 +254,11 @@ export const Main = ({
             {formatDate(unixNanos, precisionOption)}<br />
           </div>
         </div>
+        {unixNanos > UNIX_END && (
+          <div className='warning'>
+            {FUTURE_WARNING}
+          </div>
+        )}
       </div>
       <div>
         <h4>TAI minus Unix</h4>
@@ -257,6 +275,23 @@ export const Main = ({
             {formatNanos(driftNanos, precisionOption)}<br />
           </div>
         </div>
+        {
+          driftNanos % 1_000n !== 0n &&
+          precisionOption.numDecimalDigits < 9n && (
+            <div className='warning'>
+              {TRUNCATE_WARNING_1}
+            </div>
+          )
+        }
+        {
+          driftNanos % 1_000n === 0n &&
+          driftNanos % 1_000_000n !== 0n &&
+          precisionOption.numDecimalDigits < 6n && (
+            <div className='warning'>
+              {TRUNCATE_WARNING_2}
+            </div>
+          )
+        }
       </div>
 
       <div className='controls'>
@@ -363,7 +398,7 @@ export const Main = ({
       </div>
 
       <div className='footer'>
-        about <a href='https://en.wikipedia.org/wiki/Unix_time#Leap_seconds'>leap seconds in Unix time</a> · built using <code><a href='https://github.com/qntm/t-a-i'>t-a-i</a></code><br />
+        about <a href='https://en.wikipedia.org/wiki/Unix_time#Leap_seconds'>leap seconds in Unix time</a>· <a href='https://github.com/qntm/leap-second-simulator'>source code</a> · built using <code><a href='https://github.com/qntm/t-a-i'>t-a-i</a></code><br />
         <a href='https://qntm.org/src'>Back to Things of Interest</a><br />
       </div>
     </div>
@@ -381,6 +416,7 @@ Main.propTypes = {
   getInitialParams: PropTypes.func.isRequired,
   goToAtomic: PropTypes.func.isRequired,
   goToUnix: PropTypes.func.isRequired,
+  handleClickPoint: PropTypes.func.isRequired,
   handleClickMore: PropTypes.func.isRequired,
   handleClickReset: PropTypes.func.isRequired,
   model: PropTypes.oneOf([
@@ -396,7 +432,7 @@ Main.propTypes = {
     pausedAt: PropTypes.bigint
   }).isRequired,
   precisionOption: PropTypes.shape({
-    numDigits: PropTypes.bigint.isRequired,
+    numDecimalDigits: PropTypes.bigint.isRequired,
     symbol: PropTypes.string.isRequired
   }).isRequired,
   setFps: PropTypes.func.isRequired,
