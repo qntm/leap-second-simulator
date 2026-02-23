@@ -32,7 +32,7 @@ export const App = React.memo(() => {
   }, [])
 
   const handleClickX = useCallback(() => {
-    setPage(page => page === 'main' ? 'about' : 'main')
+    setPage('main')
   }, [])
 
   const handleClickMore = useCallback(() => {
