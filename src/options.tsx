@@ -1,5 +1,5 @@
 import React from 'react'
-import { MODELS } from 't-a-i/nanos'
+import { MODELS, UNIX_END } from 't-a-i/nanos'
 
 const MODEL_OPTION_OVERRUN = { model: MODELS.OVERRUN, displayName: 'overrun' }
 const MODEL_OPTION_BREAK = { model: MODELS.BREAK, displayName: 'break' }
@@ -56,10 +56,15 @@ export const FIRST_POINT = {
   backTrack: false
 }
 
-export const LAST_POINT = {
+export const CURRENT_POINT = {
   unixMillis: Date.now(),
   description: 'Present day',
   backTrack: false
+}
+
+export const FUTURE_POINT = {
+  unixMillis: UNIX_END / 1_000_000,
+  description: 'Limit of validity'
 }
 
 export const POINTS_OF_INTEREST = [
@@ -201,5 +206,6 @@ export const POINTS_OF_INTEREST = [
       </>
     )
   },
-  LAST_POINT
+  CURRENT_POINT,
+  FUTURE_POINT
 ]
