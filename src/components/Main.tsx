@@ -10,7 +10,7 @@ import {
   INITIAL_PRECISION_OPTION,
   FPSES,
   INITIAL_FPS,
-  FIRST_POINT,
+  LATEST_INSERT_POINT,
   CURRENT_POINT
 } from '../options.tsx'
 import { div, modulo, multiplyByScale } from '../utils.ts'
@@ -155,7 +155,7 @@ export const Main = ({
   setParams
 }) => {
   const handleClickMostRecent = useCallback(() => {
-    handleClickPoint(FIRST_POINT)
+    handleClickPoint(LATEST_INSERT_POINT)
   }, [goToUnix, params])
 
   // This loses a few milliseconds of accuracy I guess
@@ -276,6 +276,7 @@ export const Main = ({
           </div>
         </div>
         {
+          typeof driftNanos === 'bigint' &&
           driftNanos % 1_000n !== 0n &&
           precisionOption.numDecimalDigits < 9n && (
             <div className='warning'>
@@ -284,6 +285,7 @@ export const Main = ({
           )
         }
         {
+          typeof driftNanos === 'bigint' &&
           driftNanos % 1_000n === 0n &&
           driftNanos % 1_000_000n !== 0n &&
           precisionOption.numDecimalDigits < 6n && (

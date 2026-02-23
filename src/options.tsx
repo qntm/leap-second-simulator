@@ -56,6 +56,17 @@ export const FIRST_POINT = {
   backTrack: false
 }
 
+export const LATEST_INSERT_POINT = {
+  unixMillis: Date.UTC(2017, JAN, 1),
+  offsetChange: 1,
+  description: (
+    <>
+      Leap second.<br />
+      Most recent inserted time<br />
+    </>
+  )
+}
+
 export const CURRENT_POINT = {
   unixMillis: Date.now(),
   description: 'Present day',
@@ -196,16 +207,7 @@ export const POINTS_OF_INTEREST = [
   { unixMillis: Date.UTC(2009, JAN, 1), offsetChange: 1, description: 'Leap second' },
   { unixMillis: Date.UTC(2012, JUL, 1), offsetChange: 1, description: 'Leap second' },
   { unixMillis: Date.UTC(2015, JUL, 1), offsetChange: 1, description: 'Leap second' },
-  {
-    unixMillis: Date.UTC(2017, JAN, 1),
-    offsetChange: 1,
-    description: (
-      <>
-        Leap second.<br />
-        Most recent inserted time<br />
-      </>
-    )
-  },
+  LATEST_INSERT_POINT,
   CURRENT_POINT,
   FUTURE_POINT
 ]
