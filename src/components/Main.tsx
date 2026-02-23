@@ -26,7 +26,7 @@ const UNIX_END_STR = [
   String(UNIX_END_DATE.getUTCDate()).padStart(2, '0')
 ].join('')
 
-const FUTURE_WARNING = `⚠ It is unknown how the relationship between TAI and Unix time will evolve after ${UNIX_END_STR}.`
+const FUTURE_WARNING = `⚠️ It is unknown how the relationship between TAI and Unix time will evolve after ${UNIX_END_STR}.`
 const TRUNCATE_WARNING_1 = '⚠️ Drift rate truncated. Increase precision to ns'
 const TRUNCATE_WARNING_2 = '⚠️ Drift rate truncated. Increase precision to µs or ns'
 
@@ -400,8 +400,8 @@ export const Main = ({
       </div>
 
       <div className='footer'>
-        about <a href='https://en.wikipedia.org/wiki/Unix_time#Leap_seconds'>leap seconds in Unix time</a>· <a href='https://github.com/qntm/leap-second-simulator'>source code</a> · built using <code><a href='https://github.com/qntm/t-a-i'>t-a-i</a></code><br />
-        <a href='https://qntm.org/src'>Back to Things of Interest</a><br />
+        <a href='https://github.com/qntm/leap-second-simulator'>source code</a> · built using <code><a href='https://github.com/qntm/t-a-i'>t-a-i</a></code><br />
+        about <a href='https://en.wikipedia.org/wiki/Unix_time#Leap_seconds'>leap seconds in Unix time</a> · <a href='https://qntm.org/src'>Back to Things of Interest</a><br />
       </div>
     </div>
   )

@@ -104,7 +104,14 @@ export const App = React.memo(() => {
     let unixNanos = BigInt(point.description === 'Present day' ? Date.now() : point.unixMillis) * 1_000_000n
 
     if (point.backTrack !== false) {
-      if (model === MODELS.SMEAR) {
+      if (
+        model === MODELS.SMEAR && (
+          // No point in accounting for the smear if there is no parameter
+          // change to smear out
+          point.offsetChange !== undefined ||
+          point.driftRateChange !== undefined
+        )
+      ) {
         unixNanos -= 43_200_000_000_000n
       }
 
