@@ -6,6 +6,7 @@ import { config } from './esbuild.config.js'
 
 const result = await esbuild.build({
   ...config,
+  minify: true,
   define: {
     'window.__TAI_ENV__': JSON.stringify('production')
   }
