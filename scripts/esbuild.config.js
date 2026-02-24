@@ -6,7 +6,7 @@ export const config = {
   format: 'esm',
   outfile: './dist/main.js',
   metafile: true,
-  external: ['react', 'react-dom/client'],
+  external: ['react', 'react-dom/client', 't-a-i'],
   plugins: [{
     name: 'copyFiles',
     setup (build) {
