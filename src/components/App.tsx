@@ -1,4 +1,4 @@
-import { TaiConverter, MODELS, UNIX_START } from 't-a-i/nanos'
+import { TaiConverter, MODELS } from 't-a-i/nanos'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router'
 
@@ -26,21 +26,22 @@ export const App = React.memo(() => {
     })
   }, [])
 
+  // TODO: probably don't need the full power of `react-router` just to do this
   const [searchParams, setSearchParams] = useSearchParams()
 
   const page = useMemo(() => searchParams.get('page'), [searchParams])
 
   const handleClickQm = useCallback(() => {
     setSearchParams({ page: 'about' })
-  }, [])
+  }, [setSearchParams])
 
   const handleClickX = useCallback(() => {
     setSearchParams({})
-  }, [])
+  }, [setSearchParams])
 
   const handleClickMore = useCallback(() => {
     setSearchParams({ page: 'points' })
-  }, [])
+  }, [setSearchParams])
 
   const [fps, setFps] = useState(INITIAL_FPS)
   const [model, setModel] = useState(INITIAL_MODEL)
@@ -93,37 +94,37 @@ export const App = React.memo(() => {
     setNow(now)
   }, [])
 
-  const goToUnix = useCallback(unixNanos => {
-    // Do not allow setting time to before UTC started
-    if (unixNanos < UNIX_START) {
-      unixNanos = BigInt(UNIX_START)
-    }
-
-    const atomicNanos = converter.unixToAtomic(unixNanos)
-    goToAtomic(atomicNanos)
-  }, [])
-
   const handleClickPoint = useCallback(point => {
+    // This point in time is always guaranteed to exist.
+    // Though it may be at the precise end of some removed time.
     let unixNanos = BigInt(point.description === 'Present day' ? Date.now() : point.unixMillis) * 1_000_000n
 
-    if (point.backTrack !== false) {
-      if (
-        model === MODELS.SMEAR && (
-          // No point in accounting for the smear if there is no parameter
-          // change to smear out
-          point.offsetChange !== undefined ||
-          point.driftRateChange !== undefined
-        )
-      ) {
-        unixNanos -= 43_200_000_000_000n
-      }
-
-      unixNanos -= multiplyByScale(10_000_000_000n, params.scale)
+    // If there's a smear, backtrack through Unix time to the start of the smear
+    if (
+      model === MODELS.SMEAR && (
+        // No point in accounting for the smear if there is no parameter
+        // change to smear out
+        point.offsetChange !== undefined ||
+        point.driftRateChange !== undefined
+      )
+    ) {
+      unixNanos -= 43_200_000_000_000n
     }
 
-    goToUnix(unixNanos)
+    // If we're in stall mode, we want the START of the stall
+    let [atomicNanos] = converter.unixToAtomic(unixNanos, { range: true })
+
+    // Back 10 seconds in atomic nanoseconds...
+    // This is more accurate than Unix nanoseconds
+    // and more importantly it avoids landing in possibly-removed time
+    // (Old bug: set speed to 0.001x, then jump to 1 August 1961)
+    if (point.backTrack !== false) {
+      atomicNanos -= multiplyByScale(10_000_000_000n, params.scale)
+    }
+
+    goToAtomic(atomicNanos)
     setSearchParams({})
-  }, [converter, model, params])
+  }, [converter, model, params, goToAtomic, setSearchParams])
 
   return (
     <>
@@ -151,7 +152,6 @@ export const App = React.memo(() => {
             converter={converter}
             fps={fps}
             getInitialParams={getInitialParams}
-            goToUnix={goToUnix}
             goToAtomic={goToAtomic}
             handleClickMore={handleClickMore}
             handleClickPoint={handleClickPoint}

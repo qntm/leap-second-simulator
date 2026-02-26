@@ -1,3 +1,4 @@
+import eslintPluginReactHooks from 'eslint-plugin-react-hooks'
 import neostandard, { plugins } from 'neostandard'
 
 export default [
@@ -5,5 +6,6 @@ export default [
     ts: true,
     ignores: ['dist']
   }),
-  plugins.react.configs.flat.recommended
+  plugins.react.configs.flat.recommended,
+  eslintPluginReactHooks.configs.flat.recommended
 ]
