@@ -1,5 +1,6 @@
 import { TaiConverter, MODELS, UNIX_START } from 't-a-i/nanos'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { useSearchParams } from 'react-router'
 
 import { About } from './About.tsx'
 import { Main } from './Main.tsx'
@@ -25,18 +26,20 @@ export const App = React.memo(() => {
     })
   }, [])
 
-  const [page, setPage] = useState('main')
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  const page = useMemo(() => searchParams.get('page'), [searchParams])
 
   const handleClickQm = useCallback(() => {
-    setPage('about')
+    setSearchParams({ page: 'about' })
   }, [])
 
   const handleClickX = useCallback(() => {
-    setPage('main')
+    setSearchParams({})
   }, [])
 
   const handleClickMore = useCallback(() => {
-    setPage('points')
+    setSearchParams({ page: 'points' })
   }, [])
 
   const [fps, setFps] = useState(INITIAL_FPS)
@@ -119,7 +122,7 @@ export const App = React.memo(() => {
     }
 
     goToUnix(unixNanos)
-    setPage('main')
+    setSearchParams({})
   }, [converter, model, params])
 
   return (
@@ -128,13 +131,13 @@ export const App = React.memo(() => {
         <div className='controls-row'>
           <h1>qntm's leap second simulator</h1>
           <div className='buttons'>
-            {page === 'main' && (
+            {page === null && (
               <button className='secondary' onClick={handleClickQm}>
                 ?
               </button>
             )}
 
-            {page !== 'main' && (
+            {page !== null && (
               <button className='secondary' onClick={handleClickX}>
                 ✕
               </button>
@@ -143,7 +146,7 @@ export const App = React.memo(() => {
           </div>
         </div>
 
-        {page === 'main' && (
+        {page === null && (
           <Main
             converter={converter}
             fps={fps}
