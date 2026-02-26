@@ -141,7 +141,6 @@ export const Main = ({
   fps,
   getInitialParams,
   goToAtomic,
-  goToUnix,
   handleClickMore,
   handleClickPoint,
   model,
@@ -156,12 +155,12 @@ export const Main = ({
 }) => {
   const handleClickMostRecent = useCallback(() => {
     handleClickPoint(LATEST_INSERT_POINT)
-  }, [goToUnix, params])
+  }, [handleClickPoint])
 
   // This loses a few milliseconds of accuracy I guess
   const handleClickNow = useCallback(() => {
     handleClickPoint(CURRENT_POINT)
-  }, [goToUnix])
+  }, [handleClickPoint])
 
   const setScale = useCallback(nextScale => {
     const now = BigInt(Date.now()) * 1_000_000n
@@ -178,7 +177,7 @@ export const Main = ({
       return { offset, scale, pausedAt }
     })
     setNow(now)
-  }, [])
+  }, [setNow, setParams])
 
   const handleClickRealTime = useCallback(
     () => setScale(INITIAL_SCALE),
@@ -199,7 +198,7 @@ export const Main = ({
     const now = BigInt(Date.now()) * 1_000_000n
     const atomicNanos = multiplyByScale(now - 5_000_000_000n, params.scale) + params.offset
     goToAtomic(atomicNanos)
-  }, [params])
+  }, [params, goToAtomic])
 
   const handleClickPause = useCallback(() => {
     const now = BigInt(Date.now()) * 1_000_000n
@@ -208,7 +207,7 @@ export const Main = ({
       return { offset, scale, pausedAt }
     })
     setNow(now)
-  }, [])
+  }, [setNow, setParams])
 
   const handleClickUnpause = useCallback(() => {
     const now = BigInt(Date.now()) * 1_000_000n
@@ -218,14 +217,14 @@ export const Main = ({
       return { offset, scale, pausedAt }
     })
     setNow(now)
-  }, [])
+  }, [setNow, setParams])
 
   const handleClickReset = useCallback(() => {
     setModel(INITIAL_MODEL)
     setPrecisionOption(INITIAL_PRECISION_OPTION)
     setFps(INITIAL_FPS)
     setParams(getInitialParams())
-  }, [getInitialParams])
+  }, [setFps, setModel, setParams, setPrecisionOption, getInitialParams])
 
   // displayed time = real time * scaling factor + offset
 
@@ -417,7 +416,6 @@ Main.propTypes = {
   fps: PropTypes.number.isRequired,
   getInitialParams: PropTypes.func.isRequired,
   goToAtomic: PropTypes.func.isRequired,
-  goToUnix: PropTypes.func.isRequired,
   handleClickPoint: PropTypes.func.isRequired,
   handleClickMore: PropTypes.func.isRequired,
   handleClickReset: PropTypes.func.isRequired,
