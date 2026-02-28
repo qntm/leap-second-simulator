@@ -1,6 +1,5 @@
 import { TaiConverter, MODELS } from 't-a-i/nanos'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { useSearchParams } from 'react-router'
 
 import { About } from './About.tsx'
 import { Main } from './Main.tsx'
@@ -26,22 +25,31 @@ export const App = React.memo(() => {
     })
   }, [])
 
-  // TODO: probably don't need the full power of `react-router` just to do this
-  const [searchParams, setSearchParams] = useSearchParams()
+  // `null` on main page
+  const [page, setPage] = useState(new URLSearchParams(location.search).get('page'))
 
-  const page = useMemo(() => searchParams.get('page'), [searchParams])
+  const setPage2 = useCallback(page => {
+    const url = new URL(location)
+    if (page === null) {
+      url.searchParams.delete('page')
+    } else {
+      url.searchParams.set('page', page)
+    }
+    history.pushState({}, '', url)
+    setPage(page)
+  }, [])
 
   const handleClickQm = useCallback(() => {
-    setSearchParams({ page: 'about' })
-  }, [setSearchParams])
+    setPage2('about')
+  }, [setPage2])
 
   const handleClickX = useCallback(() => {
-    setSearchParams({})
-  }, [setSearchParams])
+    setPage2(null)
+  }, [setPage2])
 
   const handleClickMore = useCallback(() => {
-    setSearchParams({ page: 'points' })
-  }, [setSearchParams])
+    setPage2('points')
+  }, [setPage2])
 
   const [fps, setFps] = useState(INITIAL_FPS)
   const [model, setModel] = useState(INITIAL_MODEL)
@@ -123,8 +131,8 @@ export const App = React.memo(() => {
     }
 
     goToAtomic(atomicNanos)
-    setSearchParams({})
-  }, [converter, model, params, goToAtomic, setSearchParams])
+    setPage2(null)
+  }, [converter, model, params, goToAtomic, setPage2])
 
   return (
     <>

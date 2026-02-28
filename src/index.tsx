@@ -8,7 +8,6 @@
 
 import React from 'react'
 import * as ReactDOM from 'react-dom/client'
-import { BrowserRouter } from 'react-router'
 
 import { App } from './components/App.tsx'
 
@@ -24,7 +23,5 @@ if (window.__TAI_ENV__ === 'development') {
 
 const root = ReactDOM.createRoot(document.querySelector('.index__root'))
 root.render(
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>
+  <App />
 )
