@@ -15,9 +15,6 @@ export const MODEL_OPTIONS = [
 
 export const INITIAL_MODEL = MODELS.STALL
 
-export const FPSES = [1, 10, 30, 60, 120]
-export const INITIAL_FPS = 60
-
 const PRECISION_OPTION_S = { symbol: 's', numDecimalDigits: 0n }
 const PRECISION_OPTION_MS = { symbol: 'ms', numDecimalDigits: 3n }
 const PRECISION_OPTION_US = { symbol: 'µs', numDecimalDigits: 6n }

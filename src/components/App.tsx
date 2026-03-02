@@ -7,12 +7,10 @@ import { PointsOfInterest } from './PointsOfInterest.tsx'
 import {
   INITIAL_MODEL,
   INITIAL_PRECISION_OPTION,
-  INITIAL_FPS,
   INITIAL_SCALE
 } from '../options.tsx'
 import { multiplyByScale } from '../utils.ts'
 
-// TODO: add this to `t-a-i`
 const ATOMIC_START = -283_996_798_577_182_000n
 
 export const App = React.memo(() => {
@@ -51,7 +49,6 @@ export const App = React.memo(() => {
     setPage2('points')
   }, [setPage2])
 
-  const [fps, setFps] = useState(INITIAL_FPS)
   const [model, setModel] = useState(INITIAL_MODEL)
   const [precisionOption, setPrecisionOption] = useState(INITIAL_PRECISION_OPTION)
   const [now, setNow] = useState(BigInt(Date.now()) * 1_000_000n)
@@ -74,16 +71,14 @@ export const App = React.memo(() => {
       return
     }
 
-    // TODO: would be nice to attempt to hit exact fractions
-    // of seconds? Especially at 1fps
     const interval = setInterval(() => {
       setNow(BigInt(Date.now()) * 1_000_000n)
-    }, 1000 / fps)
+    }, 1000 / 60)
 
     return () => {
       clearInterval(interval)
     }
-  }, [fps, params, isHidden])
+  }, [params, isHidden])
 
   const goToAtomic = useCallback(atomicNanos => {
     const now = BigInt(Date.now()) * 1_000_000n
@@ -158,7 +153,6 @@ export const App = React.memo(() => {
         {page === null && (
           <Main
             converter={converter}
-            fps={fps}
             getInitialParams={getInitialParams}
             goToAtomic={goToAtomic}
             handleClickMore={handleClickMore}
@@ -167,7 +161,6 @@ export const App = React.memo(() => {
             now={now}
             params={params}
             precisionOption={precisionOption}
-            setFps={setFps}
             setModel={setModel}
             setNow={setNow}
             setPrecisionOption={setPrecisionOption}

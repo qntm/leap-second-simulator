@@ -8,8 +8,6 @@ import {
   INITIAL_SCALE,
   INITIAL_MODEL,
   INITIAL_PRECISION_OPTION,
-  FPSES,
-  INITIAL_FPS,
   LATEST_INSERT_POINT,
   CURRENT_POINT
 } from '../options.tsx'
@@ -138,7 +136,6 @@ const formatDate = (x, { numDecimalDigits, symbol }) => {
 
 export const Main = ({
   converter,
-  fps,
   getInitialParams,
   goToAtomic,
   handleClickMore,
@@ -147,7 +144,6 @@ export const Main = ({
   now,
   params,
   precisionOption,
-  setFps,
   setModel,
   setNow,
   setPrecisionOption,
@@ -222,9 +218,8 @@ export const Main = ({
   const handleClickReset = useCallback(() => {
     setModel(INITIAL_MODEL)
     setPrecisionOption(INITIAL_PRECISION_OPTION)
-    setFps(INITIAL_FPS)
     setParams(getInitialParams())
-  }, [setFps, setModel, setParams, setPrecisionOption, getInitialParams])
+  }, [setModel, setParams, setPrecisionOption, getInitialParams])
 
   // displayed time = real time * scaling factor + offset
 
@@ -344,21 +339,6 @@ export const Main = ({
         </div>
 
         <div className='controls-row'>
-          <div>Frames per second:</div>
-          <div className='buttons'>
-            {FPSES.map((newFps, i) => (
-              <button
-                key={i}
-                disabled={newFps === fps}
-                onClick={() => setFps(newFps)}
-              >
-                {newFps}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className='controls-row'>
           <div>
             <a href='https://github.com/qntm/t-a-i?tab=readme-ov-file#modelling-discontinuities'>Model</a>:
           </div>
@@ -413,7 +393,6 @@ Main.propTypes = {
     atomicToOffset: PropTypes.func.isRequired,
     atomicToDriftRate: PropTypes.func.isRequired
   }).isRequired,
-  fps: PropTypes.number.isRequired,
   getInitialParams: PropTypes.func.isRequired,
   goToAtomic: PropTypes.func.isRequired,
   handleClickPoint: PropTypes.func.isRequired,
@@ -435,7 +414,6 @@ Main.propTypes = {
     numDecimalDigits: PropTypes.bigint.isRequired,
     symbol: PropTypes.string.isRequired
   }).isRequired,
-  setFps: PropTypes.func.isRequired,
   setModel: PropTypes.func.isRequired,
   setPrecisionOption: PropTypes.func.isRequired,
   setParams: PropTypes.func.isRequired,
