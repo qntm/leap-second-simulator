@@ -1,11 +1,3 @@
-/*
-  TODO
-
-  Note when time is past UNIX_END
-  Note when drift rate is severely truncated
-  ...?
-*/
-
 import React from 'react'
 import * as ReactDOM from 'react-dom/client'
 
