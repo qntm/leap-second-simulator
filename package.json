@@ -1,18 +1,23 @@
 {
   "type": "module",
   "devDependencies": {
+    "@babel/core": "^7.29.0",
+    "@babel/preset-react": "^7.28.5",
     "esbuild": "^0.27.3",
     "eslint": "^9.39.3",
     "eslint-plugin-react-hooks": "^7.0.1",
     "express": "^5.2.1",
     "neostandard": "^0.12.2",
     "prop-types": "^15.8.1",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
     "t-a-i": "^5.2.0"
   },
   "scripts": {
     "build": "node scripts/build.js",
     "start-dev": "node scripts/start-dev.js",
     "start-built": "node scripts/start-built.js",
-    "test": "npx eslint"
+    "unit": "node --import ./scripts/register-tsx.js --test -- \"**/*.test.{ts,tsx}\"",
+    "test": "npx eslint && npm run unit && npm run build"
   }
 }

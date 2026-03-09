@@ -12,11 +12,6 @@ export const About = React.memo(() => {
       <p>Time conversions are handled using my JavaScript package <a href='https://github.com/qntm/t-a-i'><code>t-a-i</code></a>.</p>
       <p><b>About me:</b> I am <a href='https://qntm.org/'>qntm</a>, a writer and software developer.</p>
       <p>🐋</p>
-      <h3>Notes</h3>
-      <ul>
-        <li>Higher framerates may drain your device's battery.</li>
-        <li>Framerates should be considered approximate. "1fps" is more like one frame every 1000 ± 15ms.</li>
-      </ul>
     </>
   )
 })

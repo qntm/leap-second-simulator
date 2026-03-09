@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React, { useCallback } from 'react'
+import { useCallback } from 'react'
 import { MODELS, UNIX_END } from 't-a-i/nanos'
 
 import {
@@ -8,14 +8,10 @@ import {
   INITIAL_SCALE,
   INITIAL_MODEL,
   INITIAL_PRECISION_OPTION,
-  FPSES,
-  INITIAL_FPS,
   LATEST_INSERT_POINT,
   CURRENT_POINT
 } from '../options.tsx'
-import { div, modulo, multiplyByScale } from '../utils.ts'
-
-// TODO: add ATOMIC_END to `t-a-i`
+import { multiplyByScale, formatScale, formatNanos, formatDate } from '../utils.tsx'
 
 const UNIX_END_DATE = new Date(UNIX_END / 1_000_000)
 const UNIX_END_STR = [
@@ -30,115 +26,8 @@ const FUTURE_WARNING = `⚠️ It is unknown how the relationship between TAI an
 const TRUNCATE_WARNING_1 = '⚠️ Drift rate truncated. Increase precision to ns'
 const TRUNCATE_WARNING_2 = '⚠️ Drift rate truncated. Increase precision to µs or ns'
 
-const formatNanos = (nanos, { numDecimalDigits, symbol }) => {
-  // Happens during a break
-  if (Number.isNaN(nanos)) {
-    return <i>indeterminate</i>
-  }
-
-  // Happens during a stall
-  if (nanos === Infinity) {
-    return '∞'
-  }
-
-  nanos = div(nanos, 10n ** (9n - numDecimalDigits))
-
-  const isNegative = nanos < 0n
-  if (isNegative) {
-    nanos = -nanos
-  }
-
-  const chars = nanos.toString().split('')
-  const chunks = []
-  while (chars.length > 0) {
-    chunks.unshift(chars.splice(-3).join(''))
-  }
-  const separated = chunks.join(' ')
-  const sign = isNegative ? '-' : ''
-
-  return `${sign}${separated} ${symbol}`
-}
-
-const MILLISECONDS_PER_CYCLE = (365n * 400n + 100n - 4n + 1n) * 24n * 60n * 60n * 1000n
-
-const formatScale = scale => scale < -6n
-  ? <>10<sup>{scale}</sup>x</>
-  : scale < 0n
-    ? `0.${'0'.repeat(-Number(scale) - 1)}1x`
-    : scale === 0n
-      ? 'real time'
-      : scale <= 6n
-        ? `1${'0'.repeat(Number(scale))}x`
-        : <>10<sup>{scale}</sup>x</>
-
-// This can handle nanosecond counts far beyond JavaScript `Date`'s
-// limit of 100,000,000 days either way from the Unix epoch
-const formatDate = (x, { numDecimalDigits, symbol }) => {
-  // This can happen during a break
-  if (Number.isNaN(x)) {
-    return <i>indeterminate</i>
-  }
-
-  const nanos = modulo(x, 1_000n)
-  x -= nanos
-  x = div(x, 1_000n)
-
-  const micros = modulo(x, 1_000n)
-  x -= micros
-  x = div(x, 1_000n)
-
-  const millis = modulo(x, MILLISECONDS_PER_CYCLE)
-  x -= millis
-  x = div(x, MILLISECONDS_PER_CYCLE)
-
-  // `x` is now a count of completed 400-year cycles since the Unix epoch,
-  // whereas `millis` is small enough not to overflow `new Date()`:
-
-  const date = new Date(Number(millis))
-  const components = [
-    String(x * 400n + BigInt(date.getUTCFullYear())).padStart(4, '0'),
-    '-',
-    String(date.getUTCMonth() + 1).padStart(2, '0'),
-    '-',
-    String(date.getUTCDate()).padStart(2, '0'),
-    ' ',
-    String(date.getUTCHours()).padStart(2, '0'),
-    ':',
-    String(date.getUTCMinutes()).padStart(2, '0'),
-    ':',
-    String(date.getUTCSeconds()).padStart(2, '0')
-  ]
-
-  if (numDecimalDigits > 0n) {
-    components.push(
-      '.',
-      String(date.getUTCMilliseconds()).padStart(3, '0')
-    )
-  }
-
-  if (numDecimalDigits > 3n) {
-    components.push(
-      ' ',
-      String(micros).padStart(3, '0')
-    )
-  }
-
-  if (numDecimalDigits > 6n) {
-    components.push(
-      ' ',
-      String(nanos).padStart(3, '0')
-    )
-  }
-
-  // Why doesn't this line up on mobile? It works locally...
-  components.push('\u2007'.repeat(` ${symbol}`.length))
-
-  return components.join('')
-}
-
 export const Main = ({
   converter,
-  fps,
   getInitialParams,
   goToAtomic,
   handleClickMore,
@@ -147,7 +36,6 @@ export const Main = ({
   now,
   params,
   precisionOption,
-  setFps,
   setModel,
   setNow,
   setPrecisionOption,
@@ -222,9 +110,8 @@ export const Main = ({
   const handleClickReset = useCallback(() => {
     setModel(INITIAL_MODEL)
     setPrecisionOption(INITIAL_PRECISION_OPTION)
-    setFps(INITIAL_FPS)
     setParams(getInitialParams())
-  }, [setFps, setModel, setParams, setPrecisionOption, getInitialParams])
+  }, [setModel, setParams, setPrecisionOption, getInitialParams])
 
   // displayed time = real time * scaling factor + offset
 
@@ -344,21 +231,6 @@ export const Main = ({
         </div>
 
         <div className='controls-row'>
-          <div>Frames per second:</div>
-          <div className='buttons'>
-            {FPSES.map((newFps, i) => (
-              <button
-                key={i}
-                disabled={newFps === fps}
-                onClick={() => setFps(newFps)}
-              >
-                {newFps}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className='controls-row'>
           <div>
             <a href='https://github.com/qntm/t-a-i?tab=readme-ov-file#modelling-discontinuities'>Model</a>:
           </div>
@@ -413,7 +285,6 @@ Main.propTypes = {
     atomicToOffset: PropTypes.func.isRequired,
     atomicToDriftRate: PropTypes.func.isRequired
   }).isRequired,
-  fps: PropTypes.number.isRequired,
   getInitialParams: PropTypes.func.isRequired,
   goToAtomic: PropTypes.func.isRequired,
   handleClickPoint: PropTypes.func.isRequired,
@@ -435,7 +306,6 @@ Main.propTypes = {
     numDecimalDigits: PropTypes.bigint.isRequired,
     symbol: PropTypes.string.isRequired
   }).isRequired,
-  setFps: PropTypes.func.isRequired,
   setModel: PropTypes.func.isRequired,
   setPrecisionOption: PropTypes.func.isRequired,
   setParams: PropTypes.func.isRequired,
