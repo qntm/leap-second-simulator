@@ -13,8 +13,6 @@ import {
 } from '../options.tsx'
 import { div, modulo, multiplyByScale } from '../utils.ts'
 
-// TODO: add ATOMIC_END to `t-a-i`
-
 const UNIX_END_DATE = new Date(UNIX_END / 1_000_000)
 const UNIX_END_STR = [
   String(UNIX_END_DATE.getUTCFullYear()).padStart(4, '0'),
