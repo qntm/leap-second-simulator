@@ -17,6 +17,7 @@ module.registerHooks({
         filename: urlToLoad,
         presets: [
           ['@babel/preset-react', {
+            runtime: 'automatic',
             development: true,
             useBuiltIns: true
           }]

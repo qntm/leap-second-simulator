@@ -1,4 +1,3 @@
-import React from 'react'
 import { MODELS, UNIX_END } from 't-a-i/nanos'
 
 const MODEL_OPTION_OVERRUN = { model: MODELS.OVERRUN, displayName: 'overrun' }
@@ -15,10 +14,10 @@ export const MODEL_OPTIONS = [
 
 export const INITIAL_MODEL = MODELS.STALL
 
-const PRECISION_OPTION_S = { symbol: 's', numDecimalDigits: 0n }
-const PRECISION_OPTION_MS = { symbol: 'ms', numDecimalDigits: 3n }
-const PRECISION_OPTION_US = { symbol: 'µs', numDecimalDigits: 6n }
-const PRECISION_OPTION_NS = { symbol: 'ns', numDecimalDigits: 9n }
+export const PRECISION_OPTION_S = { symbol: 's', numDecimalDigits: 0n }
+export const PRECISION_OPTION_MS = { symbol: 'ms', numDecimalDigits: 3n }
+export const PRECISION_OPTION_US = { symbol: 'µs', numDecimalDigits: 6n }
+export const PRECISION_OPTION_NS = { symbol: 'ns', numDecimalDigits: 9n }
 
 export const PRECISION_OPTIONS = [
   PRECISION_OPTION_S,

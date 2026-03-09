@@ -9,7 +9,7 @@ import {
   INITIAL_PRECISION_OPTION,
   INITIAL_SCALE
 } from '../options.tsx'
-import { multiplyByScale } from '../utils.ts'
+import { multiplyByScale } from '../utils.tsx'
 
 const ATOMIC_START = -283_996_798_577_182_000n
 

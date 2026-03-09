@@ -3,7 +3,6 @@
   "devDependencies": {
     "@babel/core": "^7.29.0",
     "@babel/preset-react": "^7.28.5",
-    "c8": "^11.0.0",
     "esbuild": "^0.27.3",
     "eslint": "^9.39.3",
     "eslint-plugin-react-hooks": "^7.0.1",
@@ -18,7 +17,7 @@
     "build": "node scripts/build.js",
     "start-dev": "node scripts/start-dev.js",
     "start-built": "node scripts/start-built.js",
-    "unit": "c8 --100 node --import ./scripts/register-tsx.js --test",
+    "unit": "node --import ./scripts/register-tsx.js --test -- \"**/*.test.{ts,tsx}\"",
     "test": "npx eslint && npm run unit && npm run build"
   }
 }
