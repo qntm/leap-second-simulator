@@ -13,6 +13,9 @@ import { multiplyByScale } from '../utils.tsx'
 
 const ATOMIC_START = -283_996_798_577_182_000n
 
+// `null` on main page
+const getPageFromAddressBar = () => new URLSearchParams(location.search).get('page')
+
 export const App = React.memo(() => {
   const [isHidden, setIsHidden] = useState(document.hidden)
 
@@ -23,10 +26,9 @@ export const App = React.memo(() => {
     })
   }, [])
 
-  // `null` on main page
-  const [page, setPage] = useState(new URLSearchParams(location.search).get('page'))
+  const [page, setPage] = useState(getPageFromAddressBar)
 
-  const setPage2 = useCallback(page => {
+  const pushPage = useCallback(page => {
     const url = new URL(location)
     if (page === null) {
       url.searchParams.delete('page')
@@ -37,17 +39,28 @@ export const App = React.memo(() => {
     setPage(page)
   }, [])
 
+  // Handle case where used clicks "Back"
+  useEffect(() => {
+    const onPopstate = () => {
+      setPage(getPageFromAddressBar())
+    }
+    window.addEventListener('popstate', onPopstate)
+    return () => {
+      window.removeEventListener('popstate', onPopstate)
+    }
+  }, [setPage])
+
   const handleClickQm = useCallback(() => {
-    setPage2('about')
-  }, [setPage2])
+    pushPage('about')
+  }, [pushPage])
 
   const handleClickX = useCallback(() => {
-    setPage2(null)
-  }, [setPage2])
+    pushPage(null)
+  }, [pushPage])
 
   const handleClickMore = useCallback(() => {
-    setPage2('points')
-  }, [setPage2])
+    pushPage('points')
+  }, [pushPage])
 
   const [model, setModel] = useState(INITIAL_MODEL)
   const [precisionOption, setPrecisionOption] = useState(INITIAL_PRECISION_OPTION)
@@ -126,8 +139,8 @@ export const App = React.memo(() => {
     }
 
     goToAtomic(atomicNanos)
-    setPage2(null)
-  }, [converter, model, params, goToAtomic, setPage2])
+    pushPage(null)
+  }, [converter, model, params, goToAtomic, pushPage])
 
   return (
     <>

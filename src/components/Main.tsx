@@ -84,7 +84,7 @@ export const Main = ({
 
   const handleClickBack = useCallback(() => {
     const now = BigInt(Date.now()) * 1_000_000n
-    const atomicNanos = multiplyByScale(now - 5_000_000_000n, params.scale) + params.offset
+    const atomicNanos = multiplyByScale(now - 10_000_000_000n, params.scale) + params.offset
     goToAtomic(atomicNanos)
   }, [params, goToAtomic])
 
@@ -189,6 +189,9 @@ export const Main = ({
             <button onClick={handleClickMostRecent}>
               most recent leap second
             </button>
+            <button onClick={handleClickBack}>
+              back a bit
+            </button>
             <button onClick={handleClickNow}>
               now
             </button>
@@ -249,10 +252,6 @@ export const Main = ({
       </div>
 
       <div className='buttons' style={{ justifyContent: 'center' }}>
-        <button className='secondary' onClick={handleClickBack}>
-          Back a bit
-        </button>
-
         {params.pausedAt === undefined && (
           <button className='secondary' onClick={handleClickPause}>
             Pause
