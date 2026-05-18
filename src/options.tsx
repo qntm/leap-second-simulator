@@ -199,6 +199,15 @@ export const POINTS_OF_INTEREST = [
   { unixMillis: Date.UTC(1996, JAN, 1), offsetChange: 1, description: 'Leap second' },
   { unixMillis: Date.UTC(1997, JUL, 1), offsetChange: 1, description: 'Leap second' },
   { unixMillis: Date.UTC(1999, JAN, 1), offsetChange: 1, description: 'Leap second' },
+  {
+    unixMillis: Date.UTC(2000, JAN, 1),
+    description: (
+      <>
+        New millennium.<br />
+        No change in parameters<br />
+      </>
+    )
+  },
   { unixMillis: Date.UTC(2006, JAN, 1), offsetChange: 1, description: 'Leap second' },
   { unixMillis: Date.UTC(2009, JAN, 1), offsetChange: 1, description: 'Leap second' },
   { unixMillis: Date.UTC(2012, JUL, 1), offsetChange: 1, description: 'Leap second' },

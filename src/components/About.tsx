@@ -4,6 +4,7 @@ export const About = React.memo(() => {
   return (
     <>
       <h2>About this app</h2>
+      <p>Most of us have never watched a real live <a href='https://en.wikipedia.org/wiki/Leap_second'>leap second</a>.</p>
       <p>Under normal conditions, opportunities to see a leap second only occur once every 18 months or so. In recent times (as of 2026) there has been an extended dry spell of leap seconds; the most recent was on 31 December 2016. Furthermore, leap seconds <a href='https://en.wikipedia.org/wiki/Leap_second#Future'>may soon be abolished entirely</a>, which means there may <em>never</em> be another one.</p>
       <p>This app allows you to revisit past leap seconds. You can also visit a few other points of interest.</p>
       <p>Official sources are ambiguous and inconsistent about how the relationship between TAI and Unix time should be modelled during a leap second. This app provides <a href='https://github.com/qntm/t-a-i?tab=readme-ov-file#modelling-discontinuities'>several different options</a> for this. Try pausing during a leap second and switching between the models.</p>

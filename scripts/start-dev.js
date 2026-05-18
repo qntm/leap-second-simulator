@@ -4,6 +4,7 @@ import { config } from './esbuild.config.js'
 
 const context = await esbuild.context({
   ...config,
+  minify: false,
   define: {
     'window.__TAI_ENV__': JSON.stringify('development')
   }
