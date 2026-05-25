@@ -35,11 +35,9 @@ export const PointsOfInterest = React.memo(({ handleClickPoint }) => {
                   {date.getUTCDate()}&nbsp;{MONTHS[date.getUTCMonth()]}&nbsp;{date.getUTCFullYear()}
                 </button>
               </td>
-              {point.description !== undefined && (
-                <td>
-                  {point.description}
-                </td>
-              )}
+              <td>
+                {point.description}
+              </td>
             </tr>
           )
         })}
